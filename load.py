@@ -216,7 +216,6 @@ def journal_entry(cmdrname: str, is_beta: bool, system: str, station: str, entry
         config.set('mc_merit_total', int(entry['TotalMerits']))
 
         mc.merit_total.set(str(entry['TotalMerits']))
-
         mc.update_missing_merits()
 
         mc.merit_session_int += int(entry['MeritsGained'])
@@ -225,5 +224,6 @@ def journal_entry(cmdrname: str, is_beta: bool, system: str, station: str, entry
         mc.last_income.set(str(entry['MeritsGained']))
 
     if entry['event'] == 'PowerplayRank':
-        config.set('mc_power_rank', int(entry['']))
+        config.set('mc_power_rank', int(entry['Rank']))
+        mc.power_rank.set(str(entry['Rank']))
         mc.update_missing_merits()
