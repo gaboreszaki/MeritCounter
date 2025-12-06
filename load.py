@@ -12,6 +12,7 @@ from theme import theme
 import os
 
 import myNotebook as nb  # noqa: N813
+from ttkHyperlinkLabel import HyperlinkLabel
 from config import appname, config
 
 plugin_name = os.path.basename(os.path.dirname(__file__))
@@ -56,34 +57,52 @@ class MeritCounter:
         self.on_preferences_closed("", False)  # Save our prefs
 
     def setup_preferences(self, parent: nb.Notebook, cmdr: str, is_beta: bool) -> nb.Frame | None:
-        current_row = 0
+
+        PADX = 10  # noqa: N806
+        BUTTONX = 12  # noqa: N806
+        PADY = 1  # noqa: N806
+        BOXY = 2  # noqa: N806
+        SEPY = 10  # noqa: N806
+
         frame = nb.Frame(parent)
+        frame.columnconfigure(2, weight=1)
+        current_row = 0
 
-        nb.Checkbutton(frame, text="Show ", variable=self.show_power_name).grid(row=current_row, sticky=tk.W)
-        nb.Label(frame, text='Power Name').grid(row=current_row, column=1, sticky=tk.W)
-        nb.EntryMenu(frame, textvariable=self.power_name).grid(row=current_row, column=2, sticky=tk.EW)
+        HyperlinkLabel(
+            frame,
+            text='MeritCounter',
+            background=nb.Label().cget('background'),
+            url='https://github.com/gaboreszaki/MeritCounter',
+            underline=True
+        ).grid(row=current_row, columnspan=2, padx=PADX, pady=PADY, sticky=tk.W)
         current_row += 1
 
-        nb.Checkbutton(frame, text="Show ", variable=self.show_power_rank).grid(row=current_row, sticky=tk.W)
-        nb.Label(frame, text='Power Level').grid(row=current_row, column=1, sticky=tk.W)
-        nb.EntryMenu(frame, textvariable=self.power_rank).grid(row=current_row, column=2, sticky=tk.EW)
+
+        nb.Checkbutton(frame, text="Show ", variable=self.show_power_name).grid(row=current_row, padx=PADX, pady=PADY, sticky=tk.W)
+        nb.Label(frame, text='Power Name').grid(row=current_row, padx=PADX, pady=PADY, column=1, sticky=tk.W)
+        nb.EntryMenu(frame, textvariable=self.power_name).grid(row=current_row, padx=PADX, pady=BOXY, column=2, sticky=tk.EW)
         current_row += 1
 
-        nb.Checkbutton(frame, text="Show ", variable=self.show_merit_total).grid(row=current_row, sticky=tk.W)
-        nb.Label(frame, text='Total Merits').grid(row=current_row, column=1, sticky=tk.W)
-        nb.EntryMenu(frame, textvariable=self.merit_total).grid(row=current_row, column=2, sticky=tk.W)
+        nb.Checkbutton(frame, text="Show ", variable=self.show_power_rank).grid(row=current_row, padx=PADX, pady=PADY, sticky=tk.W)
+        nb.Label(frame, text='Power Level').grid(row=current_row, column=1, padx=PADX, pady=PADY, sticky=tk.W)
+        nb.EntryMenu(frame, textvariable=self.power_rank).grid(row=current_row, padx=PADX, pady=BOXY, column=2, sticky=tk.EW)
         current_row += 1
 
-        nb.Checkbutton(frame, text="Show ", variable=self.show_merit_missing).grid(row=current_row, sticky=tk.W)
-        nb.Label(frame, text='Missing Merits').grid(row=current_row, column=1, sticky=tk.W)
+        nb.Checkbutton(frame, text="Show ", variable=self.show_merit_total).grid(row=current_row, padx=PADX, pady=PADY, sticky=tk.W)
+        nb.Label(frame, text='Total Merits').grid(row=current_row, column=1, padx=PADX, pady=PADY, sticky=tk.W)
+        nb.EntryMenu(frame, textvariable=self.merit_total).grid(row=current_row, padx=PADX, pady=BOXY, column=2, sticky=tk.W)
         current_row += 1
 
-        nb.Checkbutton(frame, text="Show ", variable=self.show_merit_session).grid(row=current_row, sticky=tk.W)
-        nb.Label(frame, text='Session Merits').grid(row=current_row, column=1, sticky=tk.W)
+        nb.Checkbutton(frame, text="Show ", variable=self.show_merit_missing).grid(row=current_row, padx=PADX, pady=PADY, sticky=tk.W)
+        nb.Label(frame, text='Missing Merits').grid(row=current_row, column=1, padx=PADX, pady=PADY, sticky=tk.W)
         current_row += 1
 
-        nb.Checkbutton(frame, text="Show ", variable=self.show_last_income).grid(row=current_row, sticky=tk.W)
-        nb.Label(frame, text='Last income').grid(row=current_row, column=1, sticky=tk.W)
+        nb.Checkbutton(frame, text="Show ", variable=self.show_merit_session).grid(row=current_row, padx=PADX, pady=PADY, sticky=tk.W)
+        nb.Label(frame, text='Session Merits').grid(row=current_row, column=1, padx=PADX, pady=PADY, sticky=tk.W)
+        current_row += 1
+
+        nb.Checkbutton(frame, text="Show ", variable=self.show_last_income).grid(row=current_row, padx=PADX, pady=PADY, sticky=tk.W)
+        nb.Label(frame, text='Last income').grid(row=current_row, column=1, padx=PADX, pady=PADY, sticky=tk.W)
         current_row += 1
 
         return frame
