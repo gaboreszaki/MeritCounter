@@ -77,7 +77,6 @@ class MeritCounter:
         ).grid(row=current_row, columnspan=2, padx=PADX, pady=PADY, sticky=tk.W)
         current_row += 1
 
-
         nb.Checkbutton(frame, text="Show ", variable=self.show_power_name).grid(row=current_row, padx=PADX, pady=PADY, sticky=tk.W)
         nb.Label(frame, text='Power Name').grid(row=current_row, padx=PADX, pady=PADY, column=1, sticky=tk.W)
         nb.EntryMenu(frame, textvariable=self.power_name).grid(row=current_row, padx=PADX, pady=BOXY, column=2, sticky=tk.EW)
@@ -127,6 +126,17 @@ class MeritCounter:
         self.draw_ui()
         return self.frame
 
+    def calculate_colors (self):
+
+        if(config.get_int('theme') or 0 ) == theme.THEME_DEFAULT:
+            self.text_color = "black"
+            self.text_highlight = "black"
+        else:
+            self.text_color = "white"
+            self.text_highlight = "white"
+
+
+
     def draw_ui(self) -> None:
         if not hasattr(self, 'frame') or not self.frame or not self.frame.winfo_exists():
             return
@@ -135,41 +145,42 @@ class MeritCounter:
         for widget in self.frame.winfo_children():
             widget.destroy()
 
+        self.calculate_colors()
         current_row = 0
 
-        tk.Label(self.frame, text="//// Merit Counter", font=("Arial", 12, "bold"), fg="white").grid(row=current_row, sticky=tk.W)
+        tk.Label(self.frame, text="//// Merit Counter", font=("Arial", 12, "bold"), fg=self.text_highlight).grid(row=current_row, sticky=tk.W)
         tk.Label(self.frame, text="(PowerPLay 2.0)", font=("Arial", 8)).grid(row=current_row, column=1, sticky=tk.W)
 
         current_row += 1
 
         if self.show_power_name.get():
             tk.Label(self.frame, text="Power Name:").grid(row=current_row, sticky=tk.W)
-            tk.Label(self.frame, textvariable=self.power_name, fg="white").grid(row=current_row, column=1, sticky=tk.W)
+            tk.Label(self.frame, textvariable=self.power_name, fg=self.text_highlight).grid(row=current_row, column=1, sticky=tk.W)
             current_row += 1
 
         if self.show_power_rank.get():
             tk.Label(self.frame, text="Power Rank:").grid(row=current_row, sticky=tk.W)
-            tk.Label(self.frame, textvariable=self.power_rank, fg="white").grid(row=current_row, column=1, sticky=tk.W)
+            tk.Label(self.frame, textvariable=self.power_rank, fg=self.text_highlight).grid(row=current_row, column=1, sticky=tk.W)
             current_row += 1
 
         if self.show_merit_total.get():
             tk.Label(self.frame, text="Current Merits:").grid(row=current_row, sticky=tk.W)
-            tk.Label(self.frame, textvariable=self.merit_total, fg="white").grid(row=current_row, column=1, sticky=tk.W)
+            tk.Label(self.frame, textvariable=self.merit_total, fg=self.text_highlight).grid(row=current_row, column=1, sticky=tk.W)
             current_row += 1
 
         if self.show_merit_missing.get():
             tk.Label(self.frame, text="Merits to next level:").grid(row=current_row, sticky=tk.W)
-            tk.Label(self.frame, textvariable=self.merit_missing, fg="white").grid(row=current_row, column=1, sticky=tk.W)
+            tk.Label(self.frame, textvariable=self.merit_missing, fg=self.text_highlight).grid(row=current_row, column=1, sticky=tk.W)
             current_row += 1
 
         if self.show_merit_session.get():
             tk.Label(self.frame, text="Session Total:").grid(row=current_row, sticky=tk.W)
-            tk.Label(self.frame, textvariable=self.merit_session, fg="white").grid(row=current_row, column=1, sticky=tk.W)
+            tk.Label(self.frame, textvariable=self.merit_session, fg=self.text_highlight).grid(row=current_row, column=1, sticky=tk.W)
             current_row += 1
 
         if self.show_last_income.get():
             tk.Label(self.frame, text="Last Merit Income:").grid(row=current_row, sticky=tk.W)
-            tk.Label(self.frame, textvariable=self.last_income, fg="white").grid(row=current_row, column=1, sticky=tk.W)
+            tk.Label(self.frame, textvariable=self.last_income, fg=self.text_highlight).grid(row=current_row, column=1, sticky=tk.W)
             current_row += 1
 
         theme.update(self.frame)
