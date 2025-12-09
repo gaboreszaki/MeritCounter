@@ -7,16 +7,17 @@ A plugin for [Elite Dangerous Market Connector (EDMC)](https://github.com/EDCD/E
 *   **Real-time Tracking**: Displays your current pledged Power, Rank, and Total Merits.
 *   **Progression Calculator**: Automatically calculates the number of merits required to reach the next rank based on Powerplay 2.0 thresholds.
 *   **Session Statistics**: Tracks merits earned during the current session.
-*   **Last Income**: Shows the amount of merits gained from the last valid action.
+*   **Last Income**: Shows the number of merits gained from the last valid action.
 *   **Customizable Interface**: Toggle visibility for any field via the settings menu to keep the interface clean.
 
 ## Screenshots
 
 ### Plugin Interface
-![Main Interface](assets/edmc-meritcounter-plugin.png)
+![MeritCounter Interface Default](assets/merit_counter_interface_default.png)
+![MeritCounter Interface Dark](assets/merit_counter_interface_dark.png)
 
 ### Settings
-![Settings](assets/EDMC_MeritCouter_settings.png)
+![MeritCounter Settings](assets/merit_counter_settings.png)
 
 ## Installation
 

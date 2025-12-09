@@ -1,0 +1,9 @@
+# PowerPlay constants
+REQUIRED_MERITS_TO_NEXT_LEVEL = 8000
+POWER_LEVEL_THRESHOLDS = {1: 0, 2: 2000, 3: 5000, 4: 9000, 5: 15000}
+
+# Layout Constants
+PAD_X = 10
+PAD_Y = 1
+BOX_Y = 2
+BUTTON_X = 12
