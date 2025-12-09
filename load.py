@@ -126,16 +126,14 @@ class MeritCounter:
         self.draw_ui()
         return self.frame
 
-    def calculate_colors (self):
+    def calculate_colors(self):
 
-        if(config.get_int('theme') or 0 ) == theme.THEME_DEFAULT:
+        if (config.get_int('theme') or 0) == theme.THEME_DEFAULT:
             self.text_color = "black"
             self.text_highlight = "black"
         else:
             self.text_color = "white"
             self.text_highlight = "white"
-
-
 
     def draw_ui(self) -> None:
         if not hasattr(self, 'frame') or not self.frame or not self.frame.winfo_exists():
