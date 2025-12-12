@@ -1,4 +1,10 @@
-# get config
+# Import standard library components
+import os
+import math
+import logging
+from typing import Optional
+
+# import configs, constants and worker thread
 from config import appname, config
 import mc_constants as const
 from UpdateCheckerThreaded import UpdateChecker  # Import the new class
@@ -9,9 +15,6 @@ import myNotebook as nb
 from ttkHyperlinkLabel import HyperlinkLabel
 from theme import theme
 
-import os
-import logging
-from typing import Optional
 
 plugin_name = os.path.basename(os.path.dirname(__file__))
 logger = logging.getLogger(f"{appname}.{plugin_name}")
@@ -26,7 +29,7 @@ class MeritCounter:
 
         self.power_name = tk.StringVar(value=str(config.get_str('mc_power_name') or "No Power"))
         self.power_rank = tk.StringVar(value=str(config.get_int('mc_power_rank') or "0"))
-        self.merit_total = tk.StringVar(value=str(config.get_int('mc_merit_total') or "0"))
+        self.merit_total = tk.StringVar(value=str(config.get_int('mc_merits_total') or "0"))
 
         # Session
         self.merit_session = tk.StringVar(value="0")
@@ -161,7 +164,7 @@ class MeritCounter:
     def on_preferences_closed(self, cmdr: str, is_beta: bool) -> None:
         config.set('mc_power_name', str(self.power_name.get()))
         config.set('mc_power_rank', int(self.power_rank.get()))
-        config.set('mc_total_merits', int(self.merit_total.get()))
+        config.set('mc_merits_total', int(self.merit_total.get()))
 
         config.set('mc_show_power_name', int(self.show_power_name.get()))
         config.set('mc_show_power_rank', int(self.show_power_rank.get()))
@@ -264,34 +267,34 @@ class MeritCounter:
         missing = max(0, target - total)
         self.merit_missing.set(str(missing))
 
-    def ensure_rank_initialized(self) -> None:
-        """
-        Estimates rank based on total merits ONLY if the current rank is unknown (0).
-        This handles the edge case where EDMC loads after the game's 'Powerplay' event.
-        """
+    def recalculate_current_power_rank(self) -> None:
         try:
-            # Use in-memory state (self) as the source of truth. Handle empty strings safely.
-            current_rank = int(self.power_rank.get() or 0)
             merit_total = int(self.merit_total.get() or 0)
-        except ValueError:
-            return
-
-        # edge case logic: Only calculate if we have merits but the rank is 0
-        if merit_total > 0 and current_rank == 0:
-            tmp_rank = 0
             thresholds = const.POWER_LEVEL_THRESHOLDS
             required_merits = const.REQUIRED_MERITS_TO_NEXT_LEVEL
 
-            for rank, threshold in sorted(thresholds.items()):
-                if merit_total >= threshold:
-                    tmp_rank = rank
+            if (thresholds[5] + required_merits) <= merit_total:
+                tmp_rank = math.floor((merit_total - thresholds[5]) / required_merits) + 5
 
-            if thresholds[5] < merit_total:
-                tmp_rank = 5 + (merit_total - const.RANK_5_THRESHOLD) // required_merits
+            elif thresholds[5] <= merit_total and merit_total > (thresholds[5] + required_merits):
+                tmp_rank = 5
+            elif thresholds[4] <= merit_total and merit_total > thresholds[5]:
+                tmp_rank = 4
+            elif thresholds[3] <= merit_total and merit_total > thresholds[4]:
+                tmp_rank = 3
+            elif thresholds[2] <= merit_total and merit_total > thresholds[3]:
+                tmp_rank = 2
+            elif thresholds[1] <= merit_total and merit_total > thresholds[2]:
+                tmp_rank = 1
+            else:
+                tmp_rank = 0
 
             # Update both config and UI
             config.set('mc_power_rank', tmp_rank)
             self.power_rank.set(str(tmp_rank))
+
+        except ValueError:
+            return
 
     def handle_powerplay_event(self, entry: dict) -> None:
         power = str(entry['Power'])
@@ -319,7 +322,7 @@ class MeritCounter:
         self.power_name.set(power)
         self.merit_total.set(str(total_merits))
 
-        self.ensure_rank_initialized()
+        self.recalculate_current_power_rank()
         self.update_missing_merits()
 
         self.merit_session_int += merits_gained
